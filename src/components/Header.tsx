@@ -1,9 +1,11 @@
 import { Burger, Group, Menu, UnstyledButton } from '@mantine/core';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import classes from '../App.module.scss';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logout } from '../store/auth/AuthSlice';
+import { Role } from '../utils/types';
 
 interface HeaderProps {
   opened: boolean;
@@ -12,11 +14,15 @@ interface HeaderProps {
 
 function Header({ opened, toggle }: HeaderProps) {
   const dispatch = useAppDispatch();
-  const { isLoggedIn } = useAppSelector((state) => state.userStore);
+  const { isLoggedIn, user } = useAppSelector((state) => state.userStore);
 
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  useEffect(() => {
+    console.log(user.role);
+  }, [user.role]);
 
   return (
     <Group h="100%" px="md">
@@ -27,11 +33,32 @@ function Header({ opened, toggle }: HeaderProps) {
         </Link>
         <Group ml="xl" gap={0} visibleFrom="sm">
           {isLoggedIn ? (
-            <UnstyledButton className={classes.control}>
-              <Link to="/profile" className={classes.link}>
-                Профиль
-              </Link>
-            </UnstyledButton>
+            <>
+              {user.role === Role.DEAN && (
+                <>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/managers-approval" className={classes.link}>
+                      Управление менеджерами
+                    </Link>
+                  </UnstyledButton>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/companies-management" className={classes.link}>
+                      Управление компаниями
+                    </Link>
+                  </UnstyledButton>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/events-overview" className={classes.link}>
+                      Главная страница событий
+                    </Link>
+                  </UnstyledButton>
+                </>
+              )}
+              <UnstyledButton className={classes.control}>
+                <Link to="/profile" className={classes.link}>
+                  Профиль
+                </Link>
+              </UnstyledButton>
+            </>
           ) : (
             <UnstyledButton className={classes.control}>
               <Link to="/login" className={classes.link}>

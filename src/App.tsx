@@ -8,8 +8,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header';
 import Navbar from './components/Navbar';
+import CompaniesPage from './pages/CompaniesPage';
 import EventsPage from './pages/EventsPage';
 import LoginPage from './pages/LoginPage';
+import ManagersApprovalPage from './pages/ManagersApprovalPage';
 import RegistrationManagerPage from './pages/RegistrationManagerPage';
 import RegistrationStudentPage from './pages/RegistrationStudentPage';
 
@@ -53,6 +55,14 @@ function App() {
                   <Route
                     path="/register/student"
                     element={<RegistrationStudentPage />}
+                  />
+                  <Route
+                    path="/managers-approval"
+                    element={<ManagersApprovalPage />}
+                  />
+                  <Route
+                    path="/companies-management"
+                    element={<CompaniesPage />}
                   />
                   <Route path="/login" element={<LoginPage />} />
                 </Routes>
