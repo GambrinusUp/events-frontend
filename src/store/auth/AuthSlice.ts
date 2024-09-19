@@ -1,17 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
 
-import { Role, User } from '../../utils/types';
+import { loadTokenFromLocalStorage } from '../../helpers/loadTokenFromLocalStorage';
+import { CustomJwtPayload, Role, User } from '../../utils/types';
 import { loginUser, registerUser } from './AuthActionCreators';
 
-const loadTokenFromLocalStorage = () => {
-  try {
-    const token = localStorage.getItem('token');
-    return token ? token : '';
-  } catch (err) {
-    console.error('Could not load token', err);
-    return '';
-  }
-};
+const token = loadTokenFromLocalStorage();
+
+const decodedToken = token ? jwtDecode<CustomJwtPayload>(token) : null;
 
 export interface UserState {
   user: User;
@@ -22,15 +18,15 @@ export interface UserState {
 
 const initialState: UserState = {
   user: {
-    id: '',
+    id: decodedToken?.userId || '',
     email: '',
     name: '',
-    role: Role.STUDENT,
+    role: decodedToken?.role || Role.STUDENT,
     isConfirmed: false,
     companyId: '',
   },
-  token: loadTokenFromLocalStorage(),
-  isLoggedIn: !!loadTokenFromLocalStorage(),
+  token: token,
+  isLoggedIn: !!token,
   error: '',
 };
 
@@ -68,6 +64,9 @@ export const UserSlice = createSlice({
         ) => {
           console.log(action.payload);
           state.token = action.payload.accessToken;
+          state.user.role = jwtDecode<CustomJwtPayload>(
+            action.payload.accessToken
+          ).role;
           state.isLoggedIn = true;
           if (action.payload.accessToken)
             localStorage.setItem('token', action.payload.accessToken);
