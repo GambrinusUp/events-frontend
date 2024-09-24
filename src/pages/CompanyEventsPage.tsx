@@ -7,14 +7,18 @@ import { useNavigate } from 'react-router-dom';
 import AddEventModal from '../components/AddEventModal';
 import EventCard from '../components/EventCard';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { useNotification } from '../hooks/useNotification';
 import { getCompanyEventsList } from '../store/events/EventsActionCreators';
 
 function CompanyEventsPage() {
   const navigate = useNavigate();
-  const { events, isLoading } = useAppSelector((state) => state.eventsStore);
+  const { events, isLoading, error } = useAppSelector(
+    (state) => state.eventsStore
+  );
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useAppDispatch();
   const { token, user } = useAppSelector((state) => state.userStore);
+  const { showError } = useNotification();
 
   useEffect(() => {
     if (user.role === 'STUDENT') navigate('/');
@@ -27,8 +31,9 @@ function CompanyEventsPage() {
   }, [dispatch, token]);
 
   useEffect(() => {
-    console.log(user.isConfirmed);
-  }, [user.isConfirmed]);
+    if (error !== '') showError(error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   if (isLoading) return <Loader color="blue" />;
 

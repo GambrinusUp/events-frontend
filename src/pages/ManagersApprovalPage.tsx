@@ -13,9 +13,9 @@ import {
 function ManagersApprovalPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSuccess } = useNotification();
+  const { showSuccess, showError } = useNotification();
   const { token, user } = useAppSelector((state) => state.userStore);
-  const { managers, isLoading } = useAppSelector(
+  const { managers, isLoading, error } = useAppSelector(
     (state) => state.managersStore
   );
 
@@ -42,6 +42,11 @@ function ManagersApprovalPage() {
       }
     }
   };
+
+  useEffect(() => {
+    if (error !== '') showError(error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   if (isLoading) return <Loader color="blue" />;
 

@@ -167,6 +167,7 @@ function EventPage() {
           )}
           <Divider my="sm" />
           {user.role === 'STUDENT' &&
+            token &&
             (checkForRegister() ? (
               <Button
                 variant="light"
@@ -191,7 +192,7 @@ function EventPage() {
                 Вы уже записаны
               </Button>
             ))}
-          {user.role === 'MANAGER' && (
+          {user.role === 'MANAGER' && user.isConfirmed && (
             <>
               <Button
                 variant="light"

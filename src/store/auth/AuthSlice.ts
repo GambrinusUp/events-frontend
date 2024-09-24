@@ -87,6 +87,8 @@ export const UserSlice = createSlice({
         state.user = action.payload;
         state.token = action.payload.accessToken;
         state.isLoggedIn = true;
+        if (action.payload.accessToken)
+          localStorage.setItem('token', action.payload.accessToken);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.payload as string;
