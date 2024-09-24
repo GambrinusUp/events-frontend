@@ -1,4 +1,4 @@
-import { Loader, Text } from '@mantine/core';
+import { Loader, Stack, Text } from '@mantine/core';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,14 +23,14 @@ function MyEventsPage() {
   if (isLoading) return <Loader color="blue" />;
 
   return (
-    <>
+    <Stack p="md">
       {myEvents.length < 1 && (
         <Text>Вы пока ещё не записались на мероприятия</Text>
       )}
       {myEvents.map((event) => (
         <EventCard key={event.id} event={event} />
       ))}
-    </>
+    </Stack>
   );
 }
 

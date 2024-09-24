@@ -13,6 +13,7 @@ import CompaniesPage from './pages/CompaniesPage';
 import CompanyEventsPage from './pages/CompanyEventsPage';
 import EventPage from './pages/EventPage';
 import EventsPage from './pages/EventsPage';
+import GoogleLogin from './pages/GoogleLogin';
 import LoginPage from './pages/LoginPage';
 import ManagersApprovalPage from './pages/ManagersApprovalPage';
 import MyEventsPage from './pages/MyEventsPage';
@@ -52,6 +53,7 @@ function App() {
                 wrap="wrap"
               >
                 <Routes>
+                  <Route path="/google" element={<GoogleLogin />} />
                   <Route path="/my-events" element={<MyEventsPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route

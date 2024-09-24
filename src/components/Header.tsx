@@ -41,6 +41,11 @@ function Header({ opened, toggle }: HeaderProps) {
                       Мои мероприятия
                     </Link>
                   </UnstyledButton>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/google" className={classes.link}>
+                      Google Calendar
+                    </Link>
+                  </UnstyledButton>
                 </>
               )}
               {user.role === Role.MANAGER && (

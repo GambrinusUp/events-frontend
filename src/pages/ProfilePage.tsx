@@ -21,7 +21,7 @@ function ProfilePage() {
   if (isLoading) return <Loader color="blue" />;
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" withBorder m="md">
       <Group mb="md">
         <Text fw={500} size="lg">
           {user.name}
