@@ -32,4 +32,44 @@ export enum Role {
 export interface CustomJwtPayload {
   userId: string;
   role: Role;
+  isConfirmed: boolean;
+}
+
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  managerId: string;
+  deadline: string;
+  companyId: string;
+  manager: Partial<Manager>;
+  company: Company;
+}
+
+export interface CreateEventRequest {
+  title: string;
+  description?: string;
+  date: string;
+  location: string;
+  deadline?: string;
+}
+
+export interface EditEventResponse {
+  id: string;
+  title: string;
+  description?: string;
+  date: string;
+  location: string;
+  managerId: string;
+  deadline?: string;
+  companyId: string;
+}
+
+export interface Student {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
 }

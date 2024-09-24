@@ -29,11 +29,34 @@ function Header({ opened, toggle }: HeaderProps) {
       <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
       <Group justify="space-between" style={{ flex: 1 }}>
         <Link to="/" className={classes.link}>
-          Личный кабинет
+          Мероприятия
         </Link>
         <Group ml="xl" gap={0} visibleFrom="sm">
           {isLoggedIn ? (
             <>
+              {user.role === Role.STUDENT && (
+                <>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/my-events" className={classes.link}>
+                      Мои мероприятия
+                    </Link>
+                  </UnstyledButton>
+                </>
+              )}
+              {user.role === Role.MANAGER && (
+                <>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/company-events" className={classes.link}>
+                      Мероприятия компании
+                    </Link>
+                  </UnstyledButton>
+                  <UnstyledButton className={classes.control}>
+                    <Link to="/managers-approval" className={classes.link}>
+                      Управление менеджерами
+                    </Link>
+                  </UnstyledButton>
+                </>
+              )}
               {user.role === Role.DEAN && (
                 <>
                   <UnstyledButton className={classes.control}>
@@ -44,11 +67,6 @@ function Header({ opened, toggle }: HeaderProps) {
                   <UnstyledButton className={classes.control}>
                     <Link to="/companies-management" className={classes.link}>
                       Управление компаниями
-                    </Link>
-                  </UnstyledButton>
-                  <UnstyledButton className={classes.control}>
-                    <Link to="/events-overview" className={classes.link}>
-                      Главная страница событий
                     </Link>
                   </UnstyledButton>
                 </>

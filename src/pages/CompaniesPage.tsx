@@ -2,6 +2,7 @@ import { Button, Loader, Pagination } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { MdAddCircleOutline } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 import AddCompanyModal from '../components/AddCompanyModal';
 import CompanyCard from '../components/CompanyCard';
@@ -10,7 +11,9 @@ import { getCompaniesList } from '../store/companies/CompaniesActionCreators';
 
 function CompaniesPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
+  const { user } = useAppSelector((state) => state.userStore);
   const { companies, isLoading } = useAppSelector(
     (state) => state.companiesStore
   );
@@ -21,6 +24,10 @@ function CompaniesPage() {
   const startIndex = (activePage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedManagers = companies.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    if (user.role !== 'DEAN') navigate('/');
+  }, [navigate, user.role]);
 
   useEffect(() => {
     dispatch(getCompaniesList());

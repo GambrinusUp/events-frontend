@@ -1,5 +1,6 @@
 import { Loader, Pagination } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ManagerCard from '../components/ManagerCard';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -11,8 +12,9 @@ import {
 
 function ManagersApprovalPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { showSuccess } = useNotification();
-  const token = useAppSelector((state) => state.userStore.token);
+  const { token, user } = useAppSelector((state) => state.userStore);
   const { managers, isLoading } = useAppSelector(
     (state) => state.managersStore
   );
@@ -23,6 +25,10 @@ function ManagersApprovalPage() {
   const startIndex = (activePage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedManagers = managers.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    if (user.role === 'STUDENT' || token === '') navigate('/');
+  }, [navigate, token, user.role]);
 
   useEffect(() => {
     if (token) dispatch(getManagersList(token));

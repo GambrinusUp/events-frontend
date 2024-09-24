@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { authAPI } from '../../api/authAPI';
+import { getErrorMessage } from '../../helpers/getErrorMessage';
 import { Role, User } from '../../utils/types';
 
 interface LoginCredentials {
@@ -56,3 +57,16 @@ export const registerUser = createAsyncThunk<
     }
   }
 );
+
+export const getProfile = createAsyncThunk<
+  User,
+  { token: string },
+  { rejectValue: string }
+>('userSlice/getProfile', async ({ token }, { rejectWithValue }) => {
+  try {
+    const response = await authAPI.getProfile(token);
+    return response;
+  } catch (e) {
+    return rejectWithValue(getErrorMessage(e));
+  }
+});
