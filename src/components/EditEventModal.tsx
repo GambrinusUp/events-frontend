@@ -1,5 +1,5 @@
 import { Button, Group, Modal, TextInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
@@ -52,7 +52,7 @@ function EditEventModal({
 
   const handleSubmit = async (values: typeof form.values) => {
     if (token && values.date) {
-      console.log(values, dayjs(values.date).format('YYYY-MM-DD'));
+      console.log(values, dayjs(values.date).format('YYYY-MM-DDTHH:mm'));
       const eventData: CreateEventRequest = {
         title: values.title,
         description: values.description,
@@ -95,7 +95,8 @@ function EditEventModal({
           {...form.getInputProps('description')}
           mb="md"
         />
-        <DateInput
+        <DateTimePicker
+          valueFormat="DD.MM.YYYY HH:mm"
           label="Дата события"
           placeholder="Выберите или введите дату"
           {...form.getInputProps('date')}
@@ -107,7 +108,8 @@ function EditEventModal({
           {...form.getInputProps('location')}
           mb="md"
         />
-        <DateInput
+        <DateTimePicker
+          valueFormat="DD.MM.YYYY HH:mm"
           label="Дедлайн регистрации (если есть)"
           placeholder="Выберите или введите дату"
           {...form.getInputProps('deadline')}

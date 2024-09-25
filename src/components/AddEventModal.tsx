@@ -1,5 +1,5 @@
 import { Button, Group, Modal, TextInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
@@ -37,14 +37,14 @@ function AddEventModal({ opened, close }: AddEventModalProps) {
 
   const handleSubmit = async (values: typeof form.values) => {
     if (token) {
-      console.log(values, dayjs(values.date).format('YYYY-MM-DD'));
+      console.log(values, dayjs(values.date).format('YYYY-MM-DDTHH:mm'));
       const eventData: CreateEventRequest = {
         title: values.title,
         description: values.description,
-        date: dayjs(values.date).format('YYYY-MM-DD'),
+        date: dayjs(values.date).format('YYYY-MM-DDTHH:mm'),
         location: values.location,
         deadline: values.deadline
-          ? dayjs(values.deadline).format('YYYY-MM-DD')
+          ? dayjs(values.deadline).format('YYYY-MM-DDTHH:mm')
           : undefined,
       };
       const result = await dispatch(
@@ -82,11 +82,12 @@ function AddEventModal({ opened, close }: AddEventModalProps) {
           {...form.getInputProps('description')}
           mb="md"
         />
-        <DateInput
+        <DateTimePicker
           label="Дата события"
           placeholder="Выберите или введите дату"
           {...form.getInputProps('date')}
-          valueFormat="DD.MM.YYYY"
+          valueFormat="DD.MM.YYYY HH:mm"
+          //valueFormat="DD.MM.YYYY"
           mb="md"
         />
         <TextInput
@@ -95,11 +96,11 @@ function AddEventModal({ opened, close }: AddEventModalProps) {
           {...form.getInputProps('location')}
           mb="md"
         />
-        <DateInput
+        <DateTimePicker
           label="Дедлайн регистрации (если есть)"
           placeholder="Выберите или введите дату"
           {...form.getInputProps('deadline')}
-          valueFormat="DD.MM.YYYY"
+          valueFormat="DD.MM.YYYY HH:mm"
           mb="md"
         />
         <Group justify="flex-end">

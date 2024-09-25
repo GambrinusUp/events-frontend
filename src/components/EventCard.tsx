@@ -23,13 +23,21 @@ function EventCard({ event }: EventCardProps) {
           {event.description}
         </Text>
         <Group gap="xs" align="center">
-          <Text size="sm">{new Date(event.date).toLocaleDateString()}</Text>
+          <Text size="sm">
+            {new Date(event.date).toLocaleString('ru-RU', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </Text>
         </Group>
         <Group gap="xs" align="center">
           <Text size="sm">{event.location}</Text>
         </Group>
         <Group gap="xs" align="center">
-          <Text size="sm">Manager: {event.manager.name}</Text>
+          <Text size="sm">Менеджер: {event.manager.name}</Text>
         </Group>
         <Button
           variant="light"
