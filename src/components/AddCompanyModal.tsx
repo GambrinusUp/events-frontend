@@ -1,6 +1,7 @@
 import { Button, Group, Modal, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useNotification } from '../hooks/useNotification';
@@ -12,10 +13,15 @@ interface AddCompanyModalProps {
 }
 
 function AddCompanyModal({ opened, close }: AddCompanyModalProps) {
+  const navgiate = useNavigate();
   const token = useAppSelector((state) => state.userStore.token);
   const error = useAppSelector((state) => state.companiesStore.error);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useNotification();
+
+  useEffect(() => {
+    if (!token || token === '') navgiate('/login');
+  }, [navgiate, token]);
 
   const form = useForm({
     initialValues: {

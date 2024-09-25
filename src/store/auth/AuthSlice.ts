@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import { loadTokenFromLocalStorage } from '../../helpers/loadTokenFromLocalStorage';
 import { CustomJwtPayload, Role, User } from '../../utils/types';
-import { loginUser, registerUser } from './AuthActionCreators';
+import { getProfile, loginUser, registerUser } from './AuthActionCreators';
 
 const token = loadTokenFromLocalStorage();
 
@@ -14,6 +14,7 @@ export interface UserState {
   token?: string;
   isLoggedIn: boolean;
   error: string;
+  isLoading: boolean;
 }
 
 const initialState: UserState = {
@@ -22,12 +23,13 @@ const initialState: UserState = {
     email: '',
     name: '',
     role: decodedToken?.role || Role.STUDENT,
-    isConfirmed: false,
+    isConfirmed: decodedToken?.isConfirmed || false,
     companyId: '',
   },
   token: token,
   isLoggedIn: !!token,
   error: '',
+  isLoading: false,
 };
 
 export const UserSlice = createSlice({
@@ -67,6 +69,9 @@ export const UserSlice = createSlice({
           state.user.role = jwtDecode<CustomJwtPayload>(
             action.payload.accessToken
           ).role;
+          state.user.isConfirmed = jwtDecode<CustomJwtPayload>(
+            action.payload.accessToken
+          ).isConfirmed;
           state.isLoggedIn = true;
           if (action.payload.accessToken)
             localStorage.setItem('token', action.payload.accessToken);
@@ -82,10 +87,23 @@ export const UserSlice = createSlice({
         state.user = action.payload;
         state.token = action.payload.accessToken;
         state.isLoggedIn = true;
+        if (action.payload.accessToken)
+          localStorage.setItem('token', action.payload.accessToken);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.payload as string;
-        console.log(action.payload as string);
+      })
+      .addCase(getProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = '';
+      })
+      .addCase(getProfile.fulfilled, (state, action: PayloadAction<User>) => {
+        state.user = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(getProfile.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isLoading = false;
       });
   },
 });

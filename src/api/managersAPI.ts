@@ -10,11 +10,13 @@ async function getManagersPending(token: string): Promise<Manager[]> {
       },
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error('Ошибка при загрузке менджеров');
+      throw new Error(data.message || `Error: ${response.status}`);
     }
 
-    return response.json();
+    return data;
   } catch (error) {
     console.error('Ошибка при получении менджеров:', error);
     throw error;
@@ -31,11 +33,13 @@ async function approveManager(token: string, id: string) {
       },
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error('Ошибка при подтверждении менджера');
+      throw new Error(data.message || `Error: ${response.status}`);
     }
 
-    return response.json();
+    return data;
   } catch (error) {
     console.error('Ошибка при подтверждении менджера:', error);
     throw error;

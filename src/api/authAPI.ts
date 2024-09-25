@@ -65,7 +65,31 @@ async function register(
   }
 }
 
+async function getProfile(token: string) {
+  try {
+    const response = await fetch(`${API}/users/profile`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || `Error: ${response.status}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Ошибка при получении профиля:', error);
+    throw error;
+  }
+}
+
 export const authAPI = {
   login: login,
   register: register,
+  getProfile: getProfile,
 };
